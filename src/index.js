@@ -1,37 +1,39 @@
-// module.exports = function zeros(expression) {//TODO
-function zeros(expression) {
+module.exports = function zeros(expression) {
     let stringsArray = expression.split("*");
     let totalTwos = 0;
     let totalFives = 0;
 
-    let myClass;
+    let myContainer;
     for (let i = 0; i < stringsArray.length; i++) {
-        myClass = new MyClass(stringsArray[i]);
-        totalTwos += myClass.getTwos();
-        totalFives += myClass.getFives();
+        myContainer = new MyContainer(stringsArray[i]);
+        totalTwos += myContainer.getTwos();
+        totalFives += myContainer.getFives();
     }
 
     return Math.min(totalFives, totalTwos);
 }
 
-class MyClass{
+class MyContainer{
     constructor(str){
         this.number = parseInt(str);            //number
         this.pace = str.split('!').length - 1;  //even or odd factorial
 
+        //counting of '2' and '5' multipliers
         this.twos = 0;
         this.fives = 0;
 
         //collecting '2' and '5' multipliers
         //odd factorial has no '2' multipliers
-        if (this.number % 2 !== this.pace){
-            for (let i = 0; i < this.number; i += 2){
-                this.twos += MyClass.countMultipliers(i, 2);
+        if (this.number % this.pace !== 1){
+            for (let i = 0; i <= this.number; i += 2){
+                this.twos += MyContainer.countMultipliers(i, 2);
             }
         }
 
-        for (let i=0; i < this.number; i += 5){
-            this.fives += MyClass.countMultipliers(i, 5);
+        //begin with 0 for even numbers and with 5 for odd numbers
+        //pace 10 or 5 for even numbers and odd  numbers accordingly
+        for (let i = 5 * (this.number % 2 === 0) ? 0 : 1; i <= this.number; i += 5 * this.pace * (this.pace % 2 === 0) ? 2 : 1){
+            this.fives += MyContainer.countMultipliers(i, 5);
         }
     }
 
@@ -58,5 +60,4 @@ class MyClass{
     }
 }
 
-console.log(zeros('5!'));
 
